@@ -7,6 +7,10 @@ EC2_HOST="ec2-00-000-000-00.eu-west-1.compute.amazonaws.com"
 LOCAL_APP_PATH="/Users/some_user/dev/repo/application/my-app"
 REMOTE_APP_PATH="/home/ubuntu/repo/application"
 
+# Remove unnecessary files.
+rm -rf "${LOCAL_APP_PATH}/dist"
+rm -rf "${LOCAL_APP_PATH}/node_modules"
+
 # Stop the running container, and clean up files on the remote.
 ssh -i "${EC2_KEY}" "${EC2_USER}@${EC2_HOST}" bash -c "'
 cd $REMOTE_APP_PATH
