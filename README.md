@@ -1,2 +1,3 @@
-# shell-script-collection
+# Shell script collection
+
 A collection of useful shell scripts
