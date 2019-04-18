@@ -7,6 +7,7 @@ A collection of useful shell scripts.
 3. [Install kubectx](install-kubectx.sh)
 4. [Run brave browser](run-brave.sh)
 5. [Make m3u playlist](make-m3u-playlist.sh)
+6. [Get all GitHub repos](get-all-git-repos.sh)
 
 
 ## Other stuff out there
