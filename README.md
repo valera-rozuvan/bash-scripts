@@ -8,6 +8,7 @@ A collection of useful shell scripts.
 4. [Run brave browser](run-brave.sh)
 5. [Make m3u playlist](make-m3u-playlist.sh)
 6. [Get all GitHub repos](get-all-git-repos.sh)
+7. [Convert any video/audio file to MP3][convert-to-mp3.sh]
 
 
 ## Other stuff out there
