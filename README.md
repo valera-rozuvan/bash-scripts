@@ -9,6 +9,7 @@ A collection of useful shell scripts.
 5. [Make m3u playlist](make-m3u-playlist.sh)
 6. [Get all GitHub repos](get-all-git-repos.sh)
 7. [Convert any video/audio file to MP3][convert-to-mp3.sh]
+8. [Clear Gnome keyring](clear-keyring.sh)
 
 
 ## Other stuff out there
