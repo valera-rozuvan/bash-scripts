@@ -2,6 +2,7 @@
 
 sudo apt-get install aptitude
 sudo aptitude install terminator \
+  mc \
   apt-transport-https \
   curl \
   rar \
