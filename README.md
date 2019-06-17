@@ -18,4 +18,12 @@ A collection of useful shell scripts.
 
 1. [tomxue/countdown](https://github.com/tomxue/countdown)
 
+## Git config
+
+```
+git config --global commit.gpgsign true
+git config --global --edit
+git commit --amend --reset-author
+```
+
 ## Enjoy ;)
