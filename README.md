@@ -21,6 +21,7 @@ A collection of useful shell scripts.
 ## Git config
 
 ```
+ssh-keygen -t rsa -b 4096 -C "your@email"
 git config --global commit.gpgsign true
 git config --global --edit
 git commit --amend --reset-author
