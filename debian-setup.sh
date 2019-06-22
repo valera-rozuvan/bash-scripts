@@ -31,7 +31,9 @@ sudo aptitude install terminator \
   flex \
   gcc \
   pass \
-  ntp
+  ntp \
+  python-dev \
+  python3-dev
 
 sudo -H pip3 install glances
 
