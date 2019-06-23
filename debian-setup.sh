@@ -33,7 +33,8 @@ sudo aptitude install terminator \
   pass \
   ntp \
   python-dev \
-  python3-dev
+  python3-dev \
+  net-tools
 
 sudo -H pip3 install glances
 
