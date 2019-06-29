@@ -36,7 +36,31 @@ sudo aptitude install terminator \
   python3-dev \
   net-tools \
   geeqie-common \
-  geeqie
+  geeqie \
+  atool \
+  p7zip \
+  p7zip-full \
+  p7zip-rar \
+  nomarch \
+  arc \
+  cpio \
+  rpm \
+  arj \
+  unace \
+  lhasa \
+  rar \
+  unrar \
+  zip \
+  unzip \
+  lzma \
+  lzop \
+  plzip \
+  lzip \
+  pbzip2 \
+  bzip2 \
+  gzip \
+  tar \
+  file
 
 sudo -H pip3 install glances
 
