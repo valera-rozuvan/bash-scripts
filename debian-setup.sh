@@ -34,7 +34,9 @@ sudo aptitude install terminator \
   ntp \
   python-dev \
   python3-dev \
-  net-tools
+  net-tools \
+  geeqie-common \
+  geeqie
 
 sudo -H pip3 install glances
 
