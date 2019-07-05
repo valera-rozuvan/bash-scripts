@@ -12,7 +12,7 @@ A collection of useful shell scripts.
 8. [Clear Gnome keyring](clear-keyring.sh)
 9. [Run emacsclient](run-emacsclient.sh)
 10. [first time Debian setup](debian-setup.sh)
-
+11. [Check all pods in k8s namespace by running arbitrary commands](check_pods.sh)
 
 ## Other stuff out there
 
