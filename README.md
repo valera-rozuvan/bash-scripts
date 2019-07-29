@@ -13,6 +13,7 @@ A collection of useful shell scripts.
 9. [Run emacsclient](run-emacsclient.sh)
 10. [first time Debian setup](debian-setup.sh)
 11. [Check all pods in k8s namespace by running arbitrary commands](check_pods.sh)
+12. [Check k8s namespaces](check-k8s-namespaces.sh)
 
 ## Other stuff out there
 
