@@ -11,15 +11,15 @@ sudo aptitude install terminator \
   ffmpeg \
   mplayer \
   git \
-  emacs25 \
-  emacs25-bin-common \
-  emacs25-common \
-  emacs25-el \
-  emacs25-common-non-dfsg \
+  emacs \
+  emacs-bin-common \
+  emacs-common \
+  emacs-el \
+  emacs-common-non-dfsg \
   ufw \
   python3-pip \
   fakeroot \
-  linux-source-4.9 \
+  linux-source-4.19 \
   bzip2 \
   build-essential \
   libncurses5-dev \
@@ -60,7 +60,11 @@ sudo aptitude install terminator \
   bzip2 \
   gzip \
   tar \
-  file
+  file \
+  firmware-linux \
+  firmware-linux-free \
+  firmware-linux-nonfree \
+  libelf-dev
 
 sudo -H pip3 install glances
 
