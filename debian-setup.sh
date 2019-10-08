@@ -19,7 +19,7 @@ sudo aptitude install terminator \
   ufw \
   python3-pip \
   fakeroot \
-  linux-source-4.19 \
+  linux-source \
   bzip2 \
   build-essential \
   libncurses5-dev \
@@ -64,8 +64,17 @@ sudo aptitude install terminator \
   firmware-linux \
   firmware-linux-free \
   firmware-linux-nonfree \
-  libelf-dev
+  libelf-dev \
+  ldnsutils \
+  apt-file \
+  dnsutils \
+  bind9utils \
+  dnsdiag \
+  net-tools
+
+sudo apt-file update
 
 sudo -H pip3 install glances
 
 exit 0
+
