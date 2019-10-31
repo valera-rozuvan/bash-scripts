@@ -7,6 +7,9 @@ wget https://github.com/IBM/type/archive/master.zip
 unzip ./master.zip
 rm -rf ./master.zip
 
+sudo rm -rf /usr/share/fonts/truetype/ibm-plex
+sudo rm -rf /usr/share/fonts/opentype/ibm-plex
+
 sudo mkdir -p /usr/share/fonts/truetype/ibm-plex
 sudo mkdir -p /usr/share/fonts/opentype/ibm-plex
 
