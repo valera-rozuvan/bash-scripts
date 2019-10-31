@@ -70,7 +70,8 @@ sudo aptitude install terminator \
   dnsutils \
   bind9utils \
   dnsdiag \
-  net-tools
+  net-tools \
+  whois
 
 sudo apt-file update
 
