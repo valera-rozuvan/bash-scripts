@@ -71,11 +71,13 @@ sudo aptitude install terminator \
   bind9utils \
   dnsdiag \
   net-tools \
-  whois
+  whois \
+  rsync \
+  tmux \
+  gnupg2
 
 sudo apt-file update
 
 sudo -H pip3 install glances
 
 exit 0
-
