@@ -74,7 +74,11 @@ sudo aptitude install terminator \
   whois \
   rsync \
   tmux \
-  gnupg2
+  gnupg2 \
+  openvpn \
+  ntfs-3g \
+  gparted \
+  openresolv
 
 sudo apt-file update
 
