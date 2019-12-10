@@ -78,7 +78,8 @@ sudo aptitude install terminator \
   openvpn \
   ntfs-3g \
   gparted \
-  openresolv
+  openresolv \
+  mtools
 
 sudo apt-file update
 
