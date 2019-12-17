@@ -79,7 +79,8 @@ sudo aptitude install terminator \
   ntfs-3g \
   gparted \
   openresolv \
-  mtools
+  mtools \
+  bash-completion
 
 sudo apt-file update
 
