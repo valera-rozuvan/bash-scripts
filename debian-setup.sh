@@ -80,7 +80,10 @@ sudo aptitude install terminator \
   gparted \
   openresolv \
   mtools \
-  bash-completion
+  bash-completion \
+  fonts-inconsolata \
+  automake \
+  autoconf
 
 sudo apt-file update
 
