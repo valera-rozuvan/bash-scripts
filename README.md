@@ -18,6 +18,7 @@ A collection of useful shell scripts.
 14. [Mplayer Webcam](mplayer-webcam.sh)
 15. [Stop screen blanking](stop-screen-blanking.sh)
 16. [Run Node project in VM](run-node-project-in-vm.sh)
+17. [Do work using GCP VM](do-work-using-gcp-vm.sh)
 
 ## Other stuff out there
 
