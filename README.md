@@ -15,6 +15,7 @@ A collection of useful shell scripts.
 11. [Check all pods in k8s namespace by running arbitrary commands](check_pods.sh)
 12. [Check k8s namespaces](check-k8s-namespaces.sh)
 13. [Backup important home dirs](backup_s.sh)
+14. [Mplayer Webcam](mplayer-webcam.sh)
 
 ## Other stuff out there
 
