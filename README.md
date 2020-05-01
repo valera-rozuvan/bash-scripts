@@ -16,6 +16,7 @@ A collection of useful shell scripts.
 12. [Check k8s namespaces](check-k8s-namespaces.sh)
 13. [Backup important home dirs](backup_s.sh)
 14. [Mplayer Webcam](mplayer-webcam.sh)
+15. [Stop screen blanking](stop-screen-blanking.sh)
 
 ## Other stuff out there
 
