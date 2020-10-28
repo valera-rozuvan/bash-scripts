@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo aptitude install openssh-server
+sudo aptitude install -y openssh-server
 
 sudo rm -rf /etc/ssh_banner
 sudo rm -rf /etc/ssh/sshd_config
