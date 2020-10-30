@@ -48,6 +48,11 @@ A collection of useful shell scripts. Most likely useful only to me ;) Coded wit
 4. [Run emacsclient](app-scripts/run-emacsclient.sh)
 5. [Mplayer Webcam](app-scripts/mplayer-webcam.sh)
 
+## MongoDB
+
+1. [mongodump zip](mongodb/mongodump-zip.sh)
+2. [mongorestore zip](mongodb/mongorestore-zip.sh)
+
 ## 3rd party scripts
 
 1. [tomxue/countdown](https://github.com/tomxue/countdown)
