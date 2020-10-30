@@ -15,6 +15,7 @@ A collection of useful shell scripts. Most likely useful only to me ;) Coded wit
 ## GCP
 
 1. [Do work using GCP VM](gcp/do-work-using-gcp-vm.sh)
+2. [Switch gcloud config](gcp/switch-gcloud-config.sh)
 
 ## Linux setup
 
@@ -27,11 +28,13 @@ A collection of useful shell scripts. Most likely useful only to me ;) Coded wit
 ## Backup
 
 1. [Backup important home dirs](backup/backup_s.sh)
+2. [Backup with rsync](backup/backup-with-rsync.sh)
 
-## GitHub
+## Git
 
-1. [Get all GitHub repos](github/get-all-git-repos.sh)
-2. [Git config](github/git-config.sh)
+1. [Get all GitHub repos](git/get-all-git-repos.sh)
+2. [Git config](git/git-config.sh)
+3. [Git set author](git/git-set-author.sh)
 
 ## Node.js
 
@@ -43,11 +46,12 @@ A collection of useful shell scripts. Most likely useful only to me ;) Coded wit
 2. [Make m3u playlist](app-scripts/make-m3u-playlist.sh)
 3. [Convert any video/audio file to MP3](app-scripts/convert-to-mp3.sh)
 4. [Run emacsclient](app-scripts/run-emacsclient.sh)
-4. [Mplayer Webcam](app-scripts/mplayer-webcam.sh)
+5. [Mplayer Webcam](app-scripts/mplayer-webcam.sh)
 
 ## 3rd party scripts
 
 1. [tomxue/countdown](https://github.com/tomxue/countdown)
+2. [tsotne95/clock_in_bash](https://github.com/tsotne95/clock_in_bash)
 
 ## License
 
