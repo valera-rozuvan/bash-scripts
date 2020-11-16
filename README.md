@@ -24,6 +24,7 @@ A collection of useful shell scripts. Most likely useful only to me ;) Coded wit
 3. [Clear Gnome keyring](linux-setup/clear-keyring.sh)
 4. [Stop screen blanking](linux-setup/stop-screen-blanking.sh)
 5. [Setup SSH Server](linux-setup/setup-ssh-server.sh)
+6. [Create new user](linux-setup/create-new-user.sh)
 
 ## Backup
 
