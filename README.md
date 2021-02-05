@@ -25,6 +25,7 @@ A collection of useful shell scripts. Most likely useful only to me ;) Coded wit
 4. [Stop screen blanking](linux-setup/stop-screen-blanking.sh)
 5. [Setup SSH Server](linux-setup/setup-ssh-server.sh)
 6. [Create new user](linux-setup/create-new-user.sh)
+7. [Setup UTF-8 locale](linux-setup/setup-utf-8-locale.sh)
 
 ## Backup
 
