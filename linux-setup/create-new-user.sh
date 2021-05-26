@@ -13,7 +13,7 @@ rm -rf /home/$USER/.bashrc
 cp /root/.bashrc.user /home/$USER/.bashrc
 
 chown $USER:$USER /home/$USER/.bashrc
-mkdir /home/$USER/.ssh
+mkdir -p /home/$USER/.ssh
 echo $PUBLIC_KEY > /home/$USER/.ssh/authorized_keys
 chown $USER:$USER /home/$USER/.ssh
 chown $USER:$USER /home/$USER/.ssh/authorized_keys
