@@ -33,6 +33,12 @@ fi
 
 RND=$(tr -dc A-Za-z0-9 </dev/urandom | head -c $LENGTH ; echo '')
 
+if [[ "$OSTYPE" == "linux-gnu"* ]] ; then
+  RND=$(tr -dc A-Za-z0-9 </dev/urandom | head -c $LENGTH ; echo '')
+elif [[ "$OSTYPE" == "darwin"* ]] ; then
+  RND=$(cat /dev/urandom | env LC_ALL=C tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+fi
+
 if [[ "$SILENT" = "v" ]] ; then
   echo -e "Verbose mode.\n"
 
