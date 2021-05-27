@@ -31,6 +31,11 @@ if ! [[ "$LENGTH" =~ ^[0-9]+$ ]] ; then
   exit 1
 fi
 
+if [[ $LENGTH -eq 0 ]] ; then
+  echo "ERROR. Length can't equal 0."
+  exit 1
+fi
+
 if [[ "$OSTYPE" == "linux-gnu"* ]] ; then
   RND=$(tr -dc A-Za-z0-9 </dev/urandom | head -c $LENGTH ; echo '')
 elif [[ "$OSTYPE" == "darwin"* ]] ; then
