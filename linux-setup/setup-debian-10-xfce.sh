@@ -28,7 +28,7 @@ sudo apt-get install -y aptitude && sudo aptitude update && sudo aptitude upgrad
 echo "en_US.UTF-8 UTF-8" | sudo tee /etc/locale.gen > /dev/null
 sudo locale-gen
 
-sudo aptitude install -y wget curl mc screen rar unrar git bzip2 pass p7zip p7zip-full gawk
+sudo aptitude install -y wget curl mc screen git bzip2 pass xclip p7zip p7zip-full gawk
 
 TEMP_FOLDER=~/temp_328473289474
 
