@@ -3,6 +3,10 @@
 # This script assumes that the user can run commands via sudo without providing a password.
 # If sudo requires a password, run some command via sudo before running this script.
 # Remember, if password is provided, sudo will cache the password for some time.
+#
+# Latest version of this script can be found at:
+#
+#   https://raw.githubusercontent.com/valera-rozuvan/shell-script-collection/master/linux-setup/setup-debian-10-xfce.sh
 
 APT_SRC_FILE="/etc/apt/sources.list"
 
