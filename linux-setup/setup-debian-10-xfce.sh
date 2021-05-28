@@ -28,7 +28,7 @@ sudo apt-get install -y aptitude && sudo aptitude update && sudo aptitude upgrad
 echo "en_US.UTF-8 UTF-8" | sudo tee /etc/locale.gen > /dev/null
 sudo locale-gen
 
-sudo aptitude install -y wget mc
+sudo aptitude install -y wget curl mc screen rar unrar git bzip2 pass p7zip p7zip-full gawk
 
 TEMP_FOLDER=~/temp_328473289474
 
@@ -112,6 +112,17 @@ echo ". ~/.profile"   >> ~/.xsessionrc
 
 wget -O ~/.nanorc https://raw.githubusercontent.com/valera-rozuvan/configs/master/nano/.nanorc
 wget -O ~/.Xdefaults https://raw.githubusercontent.com/valera-rozuvan/configs/master/rxvt-unicode/.Xdefaults
+
+BASH_CONFIG_DIR=~/.bash.rc
+rm -rf $BASH_CONFIG_DIR
+mkdir -p $BASH_CONFIG_DIR
+wget -O $BASH_CONFIG_DIR/01-common.sh https://raw.githubusercontent.com/valera-rozuvan/configs/master/bash/.bash.rc/01-common.sh
+
+echo "source ${BASH_CONFIG_DIR}/01-common.sh" >> ~/.bashrc
+
+sudo aptitude install pinentry-curses
+sudo update-alternatives --install /usr/bin/pinentry pinentry /usr/bin/pinentry-curses 500
+sudo update-alternatives --set pinentry /usr/bin/pinentry-curses
 
 echo "Done!"
 
