@@ -77,7 +77,7 @@ sudo update-alternatives --set www-browser /opt/firefox/firefox
 sudo update-alternatives --install /usr/bin/gnome-www-browser gnome-www-browser /opt/firefox/firefox 500
 sudo update-alternatives --set gnome-www-browser /opt/firefox/firefox
 
-sudo aptitude install -y autoconf automake make gcc g++ libxft-dev libxft2 libxt-dev
+sudo aptitude install -y autoconf automake make gcc g++ libxft-dev libxft2 libxt-dev fonts-dejavu fonts-dejavu-core fonts-dejavu-extra
 
 wget -O $TEMP_FOLDER/rxvt-unicode-9.26.tar.bz2 http://dist.schmorp.de/rxvt-unicode/rxvt-unicode-9.26.tar.bz2 && \
   tar -xvjf $TEMP_FOLDER/rxvt-unicode-9.26.tar.bz2 -C $TEMP_FOLDER && \
@@ -109,6 +109,9 @@ echo "#!/bin/sh"      >  ~/.xsessionrc
 echo ""               >> ~/.xsessionrc
 echo ". /etc/profile" >> ~/.xsessionrc
 echo ". ~/.profile"   >> ~/.xsessionrc
+
+wget -O ~/.nanorc https://raw.githubusercontent.com/valera-rozuvan/configs/master/nano/.nanorc
+wget -O ~/.Xdefaults https://raw.githubusercontent.com/valera-rozuvan/configs/master/rxvt-unicode/.Xdefaults
 
 echo "Done!"
 
