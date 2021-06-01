@@ -8,27 +8,27 @@
 #
 #   https://raw.githubusercontent.com/valera-rozuvan/shell-script-collection/master/linux-setup/setup-debian-10-xfce.sh
 
-APT_SRC_FILE="/etc/apt/sources.list"
-
-echo "" > sudo tee $APT_SRC_FILE > /dev/null
-
-echo "deb http://mirror.netcologne.de/debian/ buster main contrib non-free"     >> sudo tee -a $APT_SRC_FILE > /dev/null
-echo "deb-src http://mirror.netcologne.de/debian/ buster main contrib non-free" >> sudo tee -a $APT_SRC_FILE > /dev/null
-
-echo "deb http://security.debian.org/debian-security buster/updates main contrib non-free"     >> sudo tee -a $APT_SRC_FILE > /dev/null
-echo "deb-src http://security.debian.org/debian-security buster/updates main contrib non-free" >> sudo tee -a $APT_SRC_FILE > /dev/null
-
-echo "deb http://mirror.netcologne.de/debian/ buster-updates main contrib non-free"     >> sudo tee -a $APT_SRC_FILE > /dev/null
-echo "deb-src http://mirror.netcologne.de/debian/ buster-updates main contrib non-free" >> sudo tee -a $APT_SRC_FILE > /dev/null
-
-sudo apt-get update && sudo apt-get upgrade -y
-
-sudo apt-get install -y aptitude && sudo aptitude update && sudo aptitude upgrade -y
-
 echo "en_US.UTF-8 UTF-8" | sudo tee /etc/locale.gen > /dev/null
 sudo locale-gen
 
-sudo aptitude install -y wget curl mc screen git bzip2 pass xclip p7zip p7zip-full gawk
+APT_SRC_FILE="/etc/apt/sources.list"
+echo "" > sudo tee $APT_SRC_FILE > /dev/null
+echo "deb http://mirror.netcologne.de/debian/ buster main contrib non-free"                    >> sudo tee -a $APT_SRC_FILE > /dev/null
+echo "deb-src http://mirror.netcologne.de/debian/ buster main contrib non-free"                >> sudo tee -a $APT_SRC_FILE > /dev/null
+echo "deb http://security.debian.org/debian-security buster/updates main contrib non-free"     >> sudo tee -a $APT_SRC_FILE > /dev/null
+echo "deb-src http://security.debian.org/debian-security buster/updates main contrib non-free" >> sudo tee -a $APT_SRC_FILE > /dev/null
+echo "deb http://mirror.netcologne.de/debian/ buster-updates main contrib non-free"            >> sudo tee -a $APT_SRC_FILE > /dev/null
+echo "deb-src http://mirror.netcologne.de/debian/ buster-updates main contrib non-free"        >> sudo tee -a $APT_SRC_FILE > /dev/null
+
+sudo apt-get update && sudo apt-get upgrade -y
+sudo apt-get install -y aptitude && sudo aptitude update && sudo aptitude upgrade -y
+sudo aptitude install -y wget curl mc screen emacs git bzip2 pass xclip p7zip p7zip-full gawk diceware
+
+git clone https://github.com/valera-rozuvan/dotfiles.git ~/.dotfiles
+cd ~/.dotfiles && ./install.sh
+cd ~/
+. ~/.xsessionrc
+. ~/.bashrc
 
 TEMP_FOLDER=~/temp_328473289474
 
@@ -103,22 +103,6 @@ chmod u+x $BIN_FOLDER/rnd_str
 
 sudo aptitude install -y python3-pip
 sudo -H pip3 install glances
-
-rm -rf ~/.xsessionrc
-echo "#!/bin/sh"      >  ~/.xsessionrc
-echo ""               >> ~/.xsessionrc
-echo ". /etc/profile" >> ~/.xsessionrc
-echo ". ~/.profile"   >> ~/.xsessionrc
-
-wget -O ~/.nanorc https://raw.githubusercontent.com/valera-rozuvan/configs/master/nano/.nanorc
-wget -O ~/.Xdefaults https://raw.githubusercontent.com/valera-rozuvan/configs/master/rxvt-unicode/.Xdefaults
-
-BASH_CONFIG_DIR=~/.bash.rc
-rm -rf $BASH_CONFIG_DIR
-mkdir -p $BASH_CONFIG_DIR
-wget -O $BASH_CONFIG_DIR/01-common.sh https://raw.githubusercontent.com/valera-rozuvan/configs/master/bash/.bash.rc/01-common.sh
-
-echo "source ${BASH_CONFIG_DIR}/01-common.sh" >> ~/.bashrc
 
 sudo aptitude install pinentry-curses
 sudo update-alternatives --install /usr/bin/pinentry pinentry /usr/bin/pinentry-curses 500
