@@ -24,6 +24,10 @@ sudo apt-get update && sudo apt-get upgrade -y
 sudo apt-get install -y aptitude && sudo aptitude update && sudo aptitude upgrade -y
 sudo aptitude install -y wget curl mc screen emacs git bzip2 pass xclip p7zip p7zip-full gawk diceware
 
+# By default xfce4-session tries to start the gpg- or ssh-agent. To disable this, we do:
+xfconf-query -c xfce4-session -p /startup/ssh-agent/enabled -n -t bool -s false
+xfconf-query -c xfce4-session -p /startup/gpg-agent/enabled -n -t bool -s false
+
 git clone https://github.com/valera-rozuvan/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles && ./install.sh
 cd ~/
