@@ -3,12 +3,32 @@
 set -o errexit
 set -o pipefail
 
-function handle_exit() {
-  echo "Unfortunately, the script did not finish..."
+function hndl_SIGHUP() {
+  echo "Unfortunately, the script received SIGHUP..."
+  exit 1
+}
+function hndl_SIGINT() {
+  echo "Unfortunately, the script received SIGINT..."
+  exit 1
+}
+function hndl_SIGQUIT() {
+  echo "Unfortunately, the script received SIGQUIT..."
+  exit 1
+}
+function hndl_SIGABRT() {
+  echo "Unfortunately, the script received SIGABRT..."
+  exit 1
+}
+function hndl_SIGTERM() {
+  echo "Unfortunately, the script received SIGTERM..."
   exit 1
 }
 
-trap handle_exit SIGHUP SIGINT SIGQUIT SIGABRT SIGTERM
+trap hndl_SIGHUP  SIGHUP
+trap hndl_SIGINT  SIGINT
+trap hndl_SIGQUIT SIGQUIT
+trap hndl_SIGABRT SIGABRT
+trap hndl_SIGTERM SIGTERM
 
 # This script assumes that the user can run commands via sudo without providing a password.
 # If sudo requires a password, run some command via sudo before running this script.
@@ -137,5 +157,5 @@ sudo update-alternatives --set pinentry /usr/bin/pinentry-curses
 # Clean up any unnecessary apt packages that did not uninstall automatically in the previous steps.
 sudo apt autoremove -y
 
-echo -e "\nDone!"
+echo -e "\nDone, without errors ;)"
 exit 0
