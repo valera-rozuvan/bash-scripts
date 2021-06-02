@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -o errexit
-set -o nounset
 set -o pipefail
 
 function handle_exit() {
@@ -52,7 +51,6 @@ git clone https://github.com/valera-rozuvan/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 ./install.sh
 cd ~/
-export DID_PROFILE_RUN=no
 . ~/.xsessionrc
 . ~/.bashrc
 
