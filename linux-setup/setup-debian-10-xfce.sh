@@ -19,6 +19,8 @@ trap handle_exit 0 SIGHUP SIGINT SIGQUIT SIGABRT SIGTERM
 #
 #   https://raw.githubusercontent.com/valera-rozuvan/shell-script-collection/master/linux-setup/setup-debian-10-xfce.sh
 
+sudo apt-get remove -y apt-listchanges
+
 # Note, below steps for locale setup are mostly Debian specific.
 sudo apt-get install -y locales
 UTF8_EN_US_LOCALE=$(cat /usr/share/i18n/SUPPORTED | grep -i "utf-8" | grep -i "en" | grep -i "us")
@@ -49,6 +51,7 @@ git clone https://github.com/valera-rozuvan/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 ./install.sh
 cd ~/
+export DID_PROFILE_RUN=no
 . ~/.xsessionrc
 . ~/.bashrc
 
