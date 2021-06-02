@@ -8,7 +8,7 @@ function handle_exit() {
   exit 1
 }
 
-trap handle_exit 0 SIGHUP SIGINT SIGQUIT SIGABRT SIGTERM
+trap handle_exit SIGHUP SIGINT SIGQUIT SIGABRT SIGTERM
 
 # This script assumes that the user can run commands via sudo without providing a password.
 # If sudo requires a password, run some command via sudo before running this script.
@@ -137,6 +137,5 @@ sudo update-alternatives --set pinentry /usr/bin/pinentry-curses
 # Clean up any unnecessary apt packages that did not uninstall automatically in the previous steps.
 sudo apt autoremove -y
 
-echo "Done!"
-
+echo -e "\nDone!"
 exit 0
