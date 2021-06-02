@@ -1,5 +1,16 @@
 #!/bin/bash
 
+set -o errexit
+set -o nounset
+set -o pipefail
+
+function handle_exit() {
+  echo "Unfortunately, the script did not finish..."
+  exit 1
+}
+
+trap handle_exit 0 SIGHUP SIGINT SIGQUIT SIGABRT SIGTERM
+
 # This script assumes that the user can run commands via sudo without providing a password.
 # If sudo requires a password, run some command via sudo before running this script.
 # Remember, if password is provided, sudo will cache (and re-use) the password for some time.
