@@ -47,6 +47,7 @@ sudo aptitude install -y wget curl mc screen emacs git bzip2 pass xclip p7zip p7
 xfconf-query -c xfce4-session -p /startup/ssh-agent/enabled -n -t bool -s false
 xfconf-query -c xfce4-session -p /startup/gpg-agent/enabled -n -t bool -s false
 
+rm -rf ~/.dotfiles
 git clone https://github.com/valera-rozuvan/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 ./install.sh
