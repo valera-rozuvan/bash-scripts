@@ -2,13 +2,16 @@
 
 # This script assumes that the user can run commands via sudo without providing a password.
 # If sudo requires a password, run some command via sudo before running this script.
-# Remember, if password is provided, sudo will cache the password for some time.
+# Remember, if password is provided, sudo will cache (and re-use) the password for some time.
 #
 # Latest version of this script can be found at:
 #
 #   https://raw.githubusercontent.com/valera-rozuvan/shell-script-collection/master/linux-setup/setup-debian-10-xfce.sh
 
-echo "en_US.UTF-8 UTF-8" | sudo tee /etc/locale.gen > /dev/null
+# Note, below steps for locale setup are mostly Debian specific.
+sudo apt-get install -y locales
+UTF8_EN_US_LOCALE=$(cat /usr/share/i18n/SUPPORTED | grep -i "utf-8" | grep -i "en" | grep -i "us")
+echo $UTF8_EN_US_LOCALE | sudo tee /etc/locale.gen > /dev/null
 sudo locale-gen
 
 APT_SRC_FILE="/etc/apt/sources.list"
@@ -20,16 +23,20 @@ echo "deb-src http://security.debian.org/debian-security buster/updates main con
 echo "deb http://mirror.netcologne.de/debian/ buster-updates main contrib non-free"            >> sudo tee -a $APT_SRC_FILE > /dev/null
 echo "deb-src http://mirror.netcologne.de/debian/ buster-updates main contrib non-free"        >> sudo tee -a $APT_SRC_FILE > /dev/null
 
-sudo apt-get update && sudo apt-get upgrade -y
-sudo apt-get install -y aptitude && sudo aptitude update && sudo aptitude upgrade -y
+sudo apt-get update
+sudo apt-get upgrade -y
+sudo apt-get install -y aptitude
+sudo aptitude update
+sudo aptitude upgrade -y
 sudo aptitude install -y wget curl mc screen emacs git bzip2 pass xclip p7zip p7zip-full gawk diceware
 
-# By default xfce4-session tries to start the gpg- or ssh-agent. To disable this, we do:
+# By default xfce4-session tries to start the gpg- or ssh-agent. We disable this behavior.
 xfconf-query -c xfce4-session -p /startup/ssh-agent/enabled -n -t bool -s false
 xfconf-query -c xfce4-session -p /startup/gpg-agent/enabled -n -t bool -s false
 
 git clone https://github.com/valera-rozuvan/dotfiles.git ~/.dotfiles
-cd ~/.dotfiles && ./install.sh
+cd ~/.dotfiles
+./install.sh
 cd ~/
 . ~/.xsessionrc
 . ~/.bashrc
@@ -54,7 +61,10 @@ sudo systemctl restart sshd
 rm -rf ~/.ssh
 mkdir ~/.ssh
 
-sudo aptitude install -y ufw && sudo ufw deny 22 && sudo ufw allow 7001 && sudo ufw enable
+sudo aptitude install -y ufw
+sudo ufw deny 22
+sudo ufw allow 7001
+sudo ufw enable
 
 sudo apt-get -y remove '^libreoffice-help-.*'
 sudo aptitude install -f -y
@@ -83,14 +93,14 @@ sudo update-alternatives --set gnome-www-browser /opt/firefox/firefox
 
 sudo aptitude install -y autoconf automake make gcc g++ libxft-dev libxft2 libxt-dev fonts-dejavu fonts-dejavu-core fonts-dejavu-extra
 
-wget -O $TEMP_FOLDER/rxvt-unicode-9.26.tar.bz2 http://dist.schmorp.de/rxvt-unicode/rxvt-unicode-9.26.tar.bz2 && \
-  tar -xvjf $TEMP_FOLDER/rxvt-unicode-9.26.tar.bz2 -C $TEMP_FOLDER && \
-  cd $TEMP_FOLDER/rxvt-unicode-9.26 && \
-  ./configure CC=gcc --disable-perl && \
-  make -j 2 && \
-  sudo make install &&
-  sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/local/bin/urxvt 500 &&
-  sudo update-alternatives --set x-terminal-emulator /usr/local/bin/urxvt
+wget -O $TEMP_FOLDER/rxvt-unicode-9.26.tar.bz2 http://dist.schmorp.de/rxvt-unicode/rxvt-unicode-9.26.tar.bz2
+tar -xvjf $TEMP_FOLDER/rxvt-unicode-9.26.tar.bz2 -C $TEMP_FOLDER
+cd $TEMP_FOLDER/rxvt-unicode-9.26
+./configure CC=gcc --disable-perl
+make -j 2
+sudo make install
+sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/local/bin/urxvt 500
+sudo update-alternatives --set x-terminal-emulator /usr/local/bin/urxvt
 cd ~/
 
 rm -rf $TEMP_FOLDER
@@ -111,6 +121,9 @@ sudo -H pip3 install glances
 sudo aptitude install pinentry-curses
 sudo update-alternatives --install /usr/bin/pinentry pinentry /usr/bin/pinentry-curses 500
 sudo update-alternatives --set pinentry /usr/bin/pinentry-curses
+
+# Clean up any unnecessary apt packages that did not uninstall automatically in the previous steps.
+sudo apt autoremove -y
 
 echo "Done!"
 
