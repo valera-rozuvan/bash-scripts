@@ -51,7 +51,6 @@ git clone https://github.com/valera-rozuvan/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 ./install.sh
 cd ~/
-. ~/.xsessionrc
 . ~/.bashrc
 
 TEMP_FOLDER=~/temp_328473289474
