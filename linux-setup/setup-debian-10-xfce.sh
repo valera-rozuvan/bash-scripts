@@ -73,6 +73,12 @@ cd ~/.dotfiles
 cd ~/
 . ~/.bashrc
 
+rm -rf ~/.scripts
+git clone https://github.com/valera-rozuvan/shell-script-collection.git ~/.scripts
+cd ~/.scripts
+./install.sh
+cd ~/
+
 TEMP_FOLDER=~/temp_328473289474
 
 rm -rf $TEMP_FOLDER
@@ -136,16 +142,6 @@ sudo update-alternatives --set x-terminal-emulator /usr/local/bin/urxvt
 cd ~/
 
 rm -rf $TEMP_FOLDER
-
-BIN_FOLDER=~/bin
-rm -rf $BIN_FOLDER
-mkdir -p $BIN_FOLDER
-
-wget -O $BIN_FOLDER/gen_ssh_key https://raw.githubusercontent.com/valera-rozuvan/shell-script-collection/master/bash/gen_ssh_key.sh
-chmod u+x $BIN_FOLDER/gen_ssh_key
-
-wget -O $BIN_FOLDER/rnd_str https://raw.githubusercontent.com/valera-rozuvan/shell-script-collection/master/bash/rnd_str.sh
-chmod u+x $BIN_FOLDER/rnd_str
 
 sudo aptitude install -y python3-pip
 sudo -H pip3 install glances
