@@ -38,9 +38,9 @@ chmod u+x $WD/linux-setup/setup-debian-10-xfce.sh
 
 mkdir -p ~/bin
 
-rm -rf ~/bin/gen_ssh_key.sh
-rm -rf ~/bin/rnd_str.sh
-rm -rf ~/bin/setup-debian-10-xfce.sh
+rm -rf ~/bin/gen_ssh_key
+rm -rf ~/bin/rnd_str
+rm -rf ~/bin/setup-debian-10-xfce
 
 ln -s $WD/bash/gen_ssh_key.sh                 ~/bin/gen_ssh_key
 ln -s $WD/bash/rnd_str.sh                     ~/bin/rnd_str
