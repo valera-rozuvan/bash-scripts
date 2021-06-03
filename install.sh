@@ -42,9 +42,9 @@ rm -rf ~/bin/gen_ssh_key.sh
 rm -rf ~/bin/rnd_str.sh
 rm -rf ~/bin/setup-debian-10-xfce.sh
 
-ln -s $WD/bash/gen_ssh_key                 ~/bin/gen_ssh_key.sh
-ln -s $WD/bash/rnd_str                     ~/bin/rnd_str.sh
-ln -s $WD/linux-setup/setup-debian-10-xfce ~/bin/setup-debian-10-xfce.sh
+ln -s $WD/bash/gen_ssh_key.sh                 ~/bin/gen_ssh_key
+ln -s $WD/bash/rnd_str.sh                     ~/bin/rnd_str
+ln -s $WD/linux-setup/setup-debian-10-xfce.sh ~/bin/setup-debian-10-xfce
 
 echo -e "\nDone, without errors ;)"
 exit 0
