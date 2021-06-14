@@ -1,6 +1,16 @@
-# Shell script collection
+# bash-scripts
 
-A collection of useful shell scripts. Most likely useful only to me ;) Coded with Bash in mind.
+A collection of useful Bash scripts.
+
+## getting latest source
+
+A public git repo is vailable at [git.rozuvan.net/bash-scripts](https://git.rozuvan.net/bash-scripts). All other sources should be considered mirrors.
+
+You can get a local copy by running the command:
+
+```
+git clone https://git.rozuvan.net/bash-scripts
+```
 
 ## k8s
 
@@ -60,9 +70,10 @@ A collection of useful shell scripts. Most likely useful only to me ;) Coded wit
 1. [tomxue/countdown](https://github.com/tomxue/countdown)
 2. [tsotne95/clock_in_bash](https://github.com/tsotne95/clock_in_bash)
 
-## License
+## license
 
-Licensed under the MIT license. See [LICENSE](LICENSE) file for more details.
-Initial concept idea by [Valera Rozuvan](https://valera.rozuvan.net/).
+This project is licensed under the MIT License. See [LICENSE](./LICENSE) for more details.
 
-## Enjoy ;)
+## maintainers
+
+- [Valera Rozuvan](https://valera.rozuvan.net/)
