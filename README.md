@@ -29,13 +29,16 @@ git clone https://git.rozuvan.net/bash-scripts
 
 ## Linux setup
 
-1. [first time Debian setup](linux-setup/debian-setup.sh)
-2. [Get IBM Plex Mono font](linux-setup/get-ibm-plex-mono-font.sh)
-3. [Clear Gnome keyring](linux-setup/clear-keyring.sh)
-4. [Stop screen blanking](linux-setup/stop-screen-blanking.sh)
-5. [Setup SSH Server](linux-setup/setup-ssh-server.sh)
-6. [Create new user](linux-setup/create-new-user.sh)
-7. [Setup UTF-8 locale](linux-setup/setup-utf-8-locale.sh)
+1. [Clear Gnome keyring](linux-setup/01-clear-gnome-keyring.sh)
+2. [Create new user](linux-setup/02-create-new-user.sh)
+3. [Debian setup all](linux-setup/03-debian-setup-all.sh)
+4. [Get IBM Plex Mono font](linux-setup/04-get-ibm-plex-mono-font.sh)
+5. [Setup Debian 10](linux-setup/05-setup-debian-10.sh)
+6. [Setup Debian 10 XFCE](linux-setup/06-setup-debian-10-xfce.sh)
+7. [Setup SSH Server](linux-setup/07-setup-ssh-server.sh)
+8. [Setup UTF-8 locale](linux-setup/08-setup-utf-8-locale.sh)
+9. [Setup XFCE4](linux-setup/09-setup-xfce4.sh)
+10. [Stop screen blanking](linux-setup/10-stop-screen-blanking.sh)
 
 ## Backup
 

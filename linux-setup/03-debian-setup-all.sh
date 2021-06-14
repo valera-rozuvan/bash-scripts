@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# This Bash script simply installs all dependencies I have ever used on Debian.
+# Basically, this is a place for me to keep track of what I need on a new system.
+# Mostly useful for an all-purpose dev system.
+
 sudo apt-get install aptitude
 sudo aptitude install terminator \
   mc \
