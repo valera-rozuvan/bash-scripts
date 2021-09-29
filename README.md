@@ -4,7 +4,7 @@ A collection of useful Bash scripts.
 
 ## getting latest source
 
-A public git repo is available at [git.rozuvan.net/bash-scripts](https://git.rozuvan.net/bash-scripts). Several mirrors exist: [mirror 1](https://github.com/valera-rozuvan/bash-scripts), [mirror 2](https://gitlab.com/valera-rozuvan/bash-scripts).
+A public git repo is available at [git.rozuvan.net/bash-scripts](https://git.rozuvan.net/bash-scripts). Several mirrors exist: [github mirror](https://github.com/valera-rozuvan/bash-scripts), [gitlab mirror](https://gitlab.com/valera-rozuvan/bash-scripts).
 
 You can get a local copy by running the command:
 
