@@ -1,0 +1,57 @@
+#!/bin/bash
+
+set -o errexit
+set -o pipefail
+
+function hndl_SIGHUP() {
+  echo "Unfortunately, the script received SIGHUP..."
+  exit 1
+}
+function hndl_SIGINT() {
+  echo "Unfortunately, the script received SIGINT..."
+  exit 1
+}
+function hndl_SIGQUIT() {
+  echo "Unfortunately, the script received SIGQUIT..."
+  exit 1
+}
+function hndl_SIGABRT() {
+  echo "Unfortunately, the script received SIGABRT..."
+  exit 1
+}
+function hndl_SIGTERM() {
+  echo "Unfortunately, the script received SIGTERM..."
+  exit 1
+}
+
+trap hndl_SIGHUP  SIGHUP
+trap hndl_SIGINT  SIGINT
+trap hndl_SIGQUIT SIGQUIT
+trap hndl_SIGABRT SIGABRT
+trap hndl_SIGTERM SIGTERM
+
+##
+ # An example hook to update the "agefile" for CGit's idle time calculation.
+ #
+ # This hook assumes that you are using the default agefile location of
+ # "info/web/last-modified".  If you change the value in your cgitrc then you
+ # must also change it here.
+ #
+ # To install the hook, copy (or link) it to the file "hooks/post-receive" in
+ # each of your repositories.
+ ##
+
+agefile="$(git rev-parse --git-dir)"/info/web/last-modified
+
+mkdir -p "$(dirname "$agefile")"
+
+git for-each-ref \
+  --sort=-authordate \
+  --count=1 \
+  --format='%(authordate:iso8601)' \
+  > "$agefile"
+
+touch ~/git_push_log
+echo "[$(date)] $(pwd)" >> ~/git_push_log 2>&1
+
+exit 0

@@ -73,6 +73,10 @@ git clone https://git.rozuvan.net/bash-scripts
 1. [tomxue/countdown](https://github.com/tomxue/countdown)
 2. [tsotne95/clock_in_bash](https://github.com/tsotne95/clock_in_bash)
 
+## cgit
+
+1. [complete setup suite for cgit](./cgit-server-setup)
+
 ## license
 
 This project is licensed under the MIT License. See [LICENSE](./LICENSE) for more details.

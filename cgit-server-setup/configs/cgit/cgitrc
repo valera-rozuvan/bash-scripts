@@ -1,0 +1,24 @@
+#
+# cgit config
+# see cgitrc(5) for details
+
+css=/cgit-css/cgit.css
+logo=/cgit-css/logo.jpg
+favicon=/cgit-css/favicon.ico
+footer=/usr/lib/cgit/cgit-css/footer.html
+source-filter=/usr/lib/cgit/filters/syntax-highlighting.py
+about-filter=/usr/lib/cgit/filters/about-formatting.sh
+
+root-title=git.rozuvan.net
+root-desc=public git repos of Valera Rozuvan
+virtual-root=/
+
+readme=:README.md
+readme=:readme.md
+readme=:README
+readme=:readme
+
+enable-http-clone=1
+enable-index-links=1
+
+include=/home/git2/cgitrepos
