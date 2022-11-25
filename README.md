@@ -1,16 +1,6 @@
 # bash-scripts
 
-A collection of useful Bash scripts.
-
-## getting latest source
-
-A public git repo is available at [git.rozuvan.net/bash-scripts](https://git.rozuvan.net/bash-scripts). Several mirrors exist: [github mirror](https://github.com/valera-rozuvan/bash-scripts), [gitlab mirror](https://gitlab.com/valera-rozuvan/bash-scripts).
-
-You can get a local copy by running the command:
-
-```
-git clone https://git.rozuvan.net/bash-scripts
-```
+a collection of useful Bash scripts
 
 ## k8s
 
@@ -77,10 +67,20 @@ git clone https://git.rozuvan.net/bash-scripts
 
 1. [complete setup suite for cgit](./cgit-server-setup)
 
+---
+
 ## license
 
-This project is licensed under the MIT License. See [LICENSE](./LICENSE) for more details.
+The project `'bash-scripts'` is licensed under the MIT License.
 
-## maintainers
+See [LICENSE](./LICENSE) for more details.
 
-- [Valera Rozuvan](https://valera.rozuvan.net/)
+The latest source code can be retrieved from one of several mirrors:
+
+1. [github.com/valera-rozuvan/bash-scripts](https://github.com/valera-rozuvan/bash-scripts)
+
+2. [gitlab.com/valera-rozuvan/bash-scripts](https://gitlab.com/valera-rozuvan/bash-scripts)
+
+3. [git.rozuvan.net/bash-scripts](https://git.rozuvan.net/bash-scripts)
+
+Copyright (c) 2019-2022 [Valera Rozuvan](https://valera.rozuvan.net/)
