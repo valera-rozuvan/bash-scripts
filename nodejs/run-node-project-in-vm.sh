@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# for the purpose of this demo - we are using https://www.npmjs.com/package/lambda-math
+# but the Node JS script can be modified in any way you like ;)
+
 sudo apt-get update
 sudo apt-get -y install curl git
 
