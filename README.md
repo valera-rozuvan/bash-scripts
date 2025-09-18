@@ -2,6 +2,10 @@
 
 a collection of useful Bash scripts
 
+## utilities
+
+1. [update sha256sum hashes](./utils/update-sha256-hashes.sh)
+
 ## k8s
 
 1. [Check all pods in k8s namespace by running arbitrary commands](k8s/check_pods.sh)
