@@ -4,33 +4,20 @@
 #                                                                              #
 # This script is part of a collection of useful Bash scripts.                  #
 #                                                                              #
-# Script: update-sha256-hashes.sh                                              #
-# Description: Re-compute sha256sum hash file based on newer files (compared   #
-#              to the date of last modification of the sha256sum.txt file.     #
+# Script: set-resolution.sh                                                    #
+# Description: Attempt to change the screen resolution under a running         #
+#              instance of X Server. Before running this script, need to setup #
+#              a proper modeline. A help section below describes how to        #
+#              use `xrandr` and `gtf` tools to discover the proper modeline    #
+#              for your particular case.                                       #
 #                                                                              #
 # Author: Valera Rozuvan                                                       #
 # GitHub: https://github.com/valera-rozuvan/bash-scripts                       #
 # SPDX-License-Identifier: MIT                                                 #
-# Last update: 2025-10-14T21:26:35+03:00                                       #
+# Last update: 2025-10-10T20:56:28+03:00                                       #
 # Bash: GNU bash, version 5.2.37(1)-release (x86_64-pc-linux-gnu)              #
 #                                                                              #
 ################################################################################
-
-#################################################################################
-#                                                                               #
-# check for common errors                                                       #
-#   __shellcheck -s bash ./update-sha256-hashes.sh                              #
-#  (remove __ above)                                                            #
-#                                                                               #
-# https://github.com/koalaman/shellcheck                                        #
-#                                                                               #
-# see helpful resources:                                                        #
-#   https://bash-prompt.net/guides/bash-help-case-statement/                    #
-#   https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/        #
-#   https://mywiki.wooledge.org/BashGuide                                       #
-#   https://mywiki.wooledge.org/BashFAQ                                         #
-#                                                                               #
-#################################################################################
 
 
 
@@ -136,110 +123,30 @@ trap hndl_ERR     ERR
 
 # ----- Main logic -------------------------------------------------------------
 
-WORKDIR1="$(pwd)"
-WORKDIR2="$PWD"
-if [ "$WORKDIR1" == "$WORKDIR2" ]; then
-  echo "Working directory is '${WORKDIR1}'. Good :-)"
-else
-  echo "Something strange with working directory."
-  exit 1
-fi
+################################################################################
+#                                                                              #
+# To get available screens and resolutions, run:                               #
+#                                                                              #
+#   xrandr                                                                     #
+#                                                                              #
+# Once you have the screen ID, and the desired resolution, you need to figure  #
+# out the proper modeline. To get a modeline for a resolution                  #
+# (for example, 1600x900 at 59.99 Hz), run:                                    #
+#                                                                              #
+#   gtf 1600 900 59.99                                                         #
+#                                                                              #
+# Now, update the below script to match what you have. Use your actual device  #
+# name instead of "eDP-1".                                                     #
+#                                                                              #
+################################################################################
 
-if [ "$#" -ne 1 ]; then
-  echo "You need to pass 1 argument. It should be the name of a directory."
-  exit 1
-fi
+MODE_NAME="1600x900_59.99"
 
-args=("$@")
-
-FOLDER_TO_HASH="${args[0]}"
-if [[ -d $FOLDER_TO_HASH ]]; then
-  echo "Argument provided '$FOLDER_TO_HASH'. It is a directory. Good :-)"
-elif [[ -f $FOLDER_TO_HASH ]]; then
-  echo "Argument provided '$FOLDER_TO_HASH'. It is a file, but should be a directory."
-  exit 1
-else
-  echo "Argument provided '$FOLDER_TO_HASH'. No file or directory with such a name."
-  exit 1
-fi
-
-SHA_SUM_FILE="${FOLDER_TO_HASH}.sha256sum.txt"
-if [[ -d $SHA_SUM_FILE ]]; then
-  echo "Make sure that '${SHA_SUM_FILE}' is a file."
-  exit 1
-elif [[ -f $SHA_SUM_FILE ]]; then
-  echo "File '${SHA_SUM_FILE}' exists. Good :-)"
-else
-  echo "Make sure that file '${SHA_SUM_FILE}' exists."
-  exit 1
-fi
-
-SHA_SUM_FILE_UPDATES="${SHA_SUM_FILE}-updates"
-touch "${SHA_SUM_FILE_UPDATES}"
-if [[ -f $SHA_SUM_FILE_UPDATES ]]; then
-  echo "Created temporary file '${SHA_SUM_FILE_UPDATES}'. Good :-)"
-else
-  echo "Could not create a temporary file '${SHA_SUM_FILE_UPDATES}'."
-  exit 1
-fi
-
-find "${FOLDER_TO_HASH}" -type f -newer "${SHA_SUM_FILE}" | sort | uniq > "${SHA_SUM_FILE_UPDATES}"
-NEW_HASHES="no"
-COUNTER=1
-TOTAL="$(wc -l < "${SHA_SUM_FILE_UPDATES}")"
-
-while IFS= read -r line; do
-
-  PATTERN="${line}"
-  echo ""
-  echo "[${COUNTER} of ${TOTAL}] Looking for '${PATTERN}' in file '${SHA_SUM_FILE}'"
-
-  GREP_STATUS=""
-  grep -F "${PATTERN}" "${SHA_SUM_FILE}" && GREP_STATUS="found" || GREP_STATUS="not-found"
-
-  if [ "$GREP_STATUS" == "found" ]; then
-    echo "  -> found in sum file - will update HASH"
-
-    LINENUMBER="$( grep -F -n "$PATTERN" "$SHA_SUM_FILE" | cut -d':' -f1 )"
-    sed -i "${LINENUMBER}d" "$SHA_SUM_FILE"
-
-    # sha256sum "${PATTERN}" >> "${SHA_SUM_FILE}"
-    HASH_INFO="$(sha256sum "${PATTERN}")"
-    echo "${HASH_INFO}"
-    echo "${HASH_INFO}" >> "${SHA_SUM_FILE}"
-
-    NEW_HASHES="yes"
-  elif [ "$GREP_STATUS" == "not-found" ]; then
-    echo "  -> new file - will append HASH"
-
-    # sha256sum "${PATTERN}" >> "${SHA_SUM_FILE}"
-    HASH_INFO="$(sha256sum "${PATTERN}")"
-    echo "${HASH_INFO}"
-    echo "${HASH_INFO}" >> "${SHA_SUM_FILE}"
-
-    NEW_HASHES="yes"
-	else
-		echo "something went wrong while searching"
-    exit 1
-  fi
-
-  COUNTER=$((COUNTER + 1))
-
-done < "${SHA_SUM_FILE_UPDATES}"
-
-echo ""
-rm -rf "${SHA_SUM_FILE_UPDATES}"
-echo "Removed temporary file '${SHA_SUM_FILE_UPDATES}'."
-
-if [ "$NEW_HASHES" == "yes" ]; then
-  sort --unique "${SHA_SUM_FILE}" -o "${SHA_SUM_FILE}"
-  echo "Sorted '${SHA_SUM_FILE}' file (using 'unique' mode)."
-
-  sha256sum "${SHA_SUM_FILE}" > "${SHA_SUM_FILE}.sha"
-  echo "Generated '${SHA_SUM_FILE}.sha' file."
-else
-  echo "No files to hash."
-fi
+xrandr --newmode "${MODE_NAME}" \
+  118.98  1600 1696 1864 2128  900 901 904 932 -HSync +Vsync
+xrandr --addmode "eDP-1" "${MODE_NAME}"
+xrandr --output "eDP-1" --mode "${MODE_NAME}"
+xrandr --output "eDP-1" --brightness "1.0"
 
 exit 0
 

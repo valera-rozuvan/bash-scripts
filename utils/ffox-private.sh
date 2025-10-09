@@ -4,33 +4,23 @@
 #                                                                              #
 # This script is part of a collection of useful Bash scripts.                  #
 #                                                                              #
-# Script: update-sha256-hashes.sh                                              #
-# Description: Re-compute sha256sum hash file based on newer files (compared   #
-#              to the date of last modification of the sha256sum.txt file.     #
+# Script: ffox-private.sh                                                      #
+# Description: Launches Firefox with a fresh new profile. Also, randomizes     #
+#              the agent string, as well as starting window size and           #
+#              position. Once Firefox is closed, the profile folder is         #
+#              deleted. Part of the collection of scripts to work with Firefox #
+#              profiles:                                                       #
+#                - ffox-add-profile.sh                                         #
+#                - ffox-private.sh                                             #
+#                - ffox-profile.sh                                             #
 #                                                                              #
 # Author: Valera Rozuvan                                                       #
 # GitHub: https://github.com/valera-rozuvan/bash-scripts                       #
 # SPDX-License-Identifier: MIT                                                 #
-# Last update: 2025-10-14T21:26:35+03:00                                       #
+# Last update: 2025-10-11T18:23:38+03:00                                       #
 # Bash: GNU bash, version 5.2.37(1)-release (x86_64-pc-linux-gnu)              #
 #                                                                              #
 ################################################################################
-
-#################################################################################
-#                                                                               #
-# check for common errors                                                       #
-#   __shellcheck -s bash ./update-sha256-hashes.sh                              #
-#  (remove __ above)                                                            #
-#                                                                               #
-# https://github.com/koalaman/shellcheck                                        #
-#                                                                               #
-# see helpful resources:                                                        #
-#   https://bash-prompt.net/guides/bash-help-case-statement/                    #
-#   https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/        #
-#   https://mywiki.wooledge.org/BashGuide                                       #
-#   https://mywiki.wooledge.org/BashFAQ                                         #
-#                                                                               #
-#################################################################################
 
 
 
@@ -136,110 +126,76 @@ trap hndl_ERR     ERR
 
 # ----- Main logic -------------------------------------------------------------
 
-WORKDIR1="$(pwd)"
-WORKDIR2="$PWD"
-if [ "$WORKDIR1" == "$WORKDIR2" ]; then
-  echo "Working directory is '${WORKDIR1}'. Good :-)"
-else
-  echo "Something strange with working directory."
-  exit 1
-fi
+WIN_WIDTH=$((800 + RANDOM % 200))
+WIN_HEIGHT=$((600 + RANDOM % 200))
+MOZL_USER_AGENT_VERSION=$((111 + RANDOM % 30))
+RND_OS_AGENTS=(
+  "Macintosh; Intel Mac OS X 10.15;"
+  "Windows NT 10.0; Win64; x64;"
+  "X11; Linux x86_64;"
+  "X11; Ubuntu; Linux x86_64;"
+)
+RND_INDEX=$(( RANDOM % ${#RND_OS_AGENTS[@]} ))
+RND_OS_AGENT="${RND_OS_AGENTS[$RND_INDEX]}"
 
-if [ "$#" -ne 1 ]; then
-  echo "You need to pass 1 argument. It should be the name of a directory."
-  exit 1
-fi
+# multiline string def - see https://stackoverflow.com/questions/23929235 .
+MOZL_USER_AGENT=""
+MOZL_USER_AGENT+="Mozilla/5.0 (${RND_OS_AGENT} "
+MOZL_USER_AGENT+="rv:${MOZL_USER_AGENT_VERSION}.0) "
+MOZL_USER_AGENT+="Gecko/20100101 "
+MOZL_USER_AGENT+="Firefox/${MOZL_USER_AGENT_VERSION}.0"
 
-args=("$@")
+HOME_DIRECTORY=$(eval echo "~${USER}")
+MOZL_PROFILE_FOLDER="${HOME_DIRECTORY}/custom-mozilla-profiles/random-stuff"
 
-FOLDER_TO_HASH="${args[0]}"
-if [[ -d $FOLDER_TO_HASH ]]; then
-  echo "Argument provided '$FOLDER_TO_HASH'. It is a directory. Good :-)"
-elif [[ -f $FOLDER_TO_HASH ]]; then
-  echo "Argument provided '$FOLDER_TO_HASH'. It is a file, but should be a directory."
-  exit 1
-else
-  echo "Argument provided '$FOLDER_TO_HASH'. No file or directory with such a name."
-  exit 1
-fi
+MOZL_WIN_PREF=""
+MOZL_WIN_PREF+="{"
+  MOZL_WIN_PREF+="\"chrome://browser/content/browser.xhtml\":{"
+    MOZL_WIN_PREF+="\"main-window\":{"
+      MOZL_WIN_PREF+="\"screenX\":\"0\","
+      MOZL_WIN_PREF+="\"screenY\":\"0\","
+      MOZL_WIN_PREF+="\"width\":\"${WIN_WIDTH}\","
+      MOZL_WIN_PREF+="\"height\":\"${WIN_HEIGHT}\","
+      MOZL_WIN_PREF+="\"sizemode\":\"normal\""
+    MOZL_WIN_PREF+="}"
+  MOZL_WIN_PREF+="}"
+MOZL_WIN_PREF+="}"
 
-SHA_SUM_FILE="${FOLDER_TO_HASH}.sha256sum.txt"
-if [[ -d $SHA_SUM_FILE ]]; then
-  echo "Make sure that '${SHA_SUM_FILE}' is a file."
-  exit 1
-elif [[ -f $SHA_SUM_FILE ]]; then
-  echo "File '${SHA_SUM_FILE}' exists. Good :-)"
-else
-  echo "Make sure that file '${SHA_SUM_FILE}' exists."
-  exit 1
-fi
+echo "WIN_WIDTH = ${WIN_WIDTH}"
+echo "WIN_HEIGHT = ${WIN_HEIGHT}"
+echo "MOZL_USER_AGENT_VERSION = ${MOZL_USER_AGENT_VERSION}"
+echo "array RND_OS_AGENTS = ${RND_OS_AGENTS[*]}"
+echo "RND_INDEX = ${RND_INDEX}"
+echo "RND_OS_AGENT = ${RND_OS_AGENT}"
+echo "MOZL_USER_AGENT = ${MOZL_USER_AGENT}"
+echo "HOME_DIRECTORY = ${HOME_DIRECTORY}"
+echo "MOZL_PROFILE_FOLDER = ${MOZL_PROFILE_FOLDER}"
+echo "MOZL_WIN_PREF = ${MOZL_WIN_PREF}"
 
-SHA_SUM_FILE_UPDATES="${SHA_SUM_FILE}-updates"
-touch "${SHA_SUM_FILE_UPDATES}"
-if [[ -f $SHA_SUM_FILE_UPDATES ]]; then
-  echo "Created temporary file '${SHA_SUM_FILE_UPDATES}'. Good :-)"
-else
-  echo "Could not create a temporary file '${SHA_SUM_FILE_UPDATES}'."
-  exit 1
-fi
+mkdir -p "${MOZL_PROFILE_FOLDER}"
 
-find "${FOLDER_TO_HASH}" -type f -newer "${SHA_SUM_FILE}" | sort | uniq > "${SHA_SUM_FILE_UPDATES}"
-NEW_HASHES="no"
-COUNTER=1
-TOTAL="$(wc -l < "${SHA_SUM_FILE_UPDATES}")"
+echo "" > "${MOZL_PROFILE_FOLDER}/user.js"
+{
+  echo "user_pref(\"general.useragent.override\", \"${MOZL_USER_AGENT}\");"
+  echo "user_pref(\"browser.translations.enable\", false);"
+  echo "user_pref(\"browser.translations.automaticallyPopup\", false);"
+  echo "user_pref(\"browser.shell.checkDefaultBrowser\", false);"
+  echo "user_pref(\"browser.tabs.warnOnClose\", false);"
+  echo "user_pref(\"browser.tabs.warnOnCloseOtherTabs\", false);"
+  echo "user_pref(\"browser.showQuitWarning\", false);"
+  echo "user_pref(\"dom.disable_beforeunload\", true);"
+  echo "user_pref(\"browser.warnOnQuit\", false);"
+  echo "user_pref(\"browser.warnOnQuitShortcut\", false);"
+  echo "user_pref(\"sidebar.revamp\", false);"
+  echo "user_pref(\"startup.homepage_welcome_url\", \"\");"
+} >> "${MOZL_PROFILE_FOLDER}/user.js"
 
-while IFS= read -r line; do
+# also check suggestions https://msfn.org/board/topic/186106-r3dfox-a-modern-firefox-based-web-browser-for-windows-vista-7-and-8/page/9/
 
-  PATTERN="${line}"
-  echo ""
-  echo "[${COUNTER} of ${TOTAL}] Looking for '${PATTERN}' in file '${SHA_SUM_FILE}'"
+echo "${MOZL_WIN_PREF}" > "${MOZL_PROFILE_FOLDER}/xulstore.json"
 
-  GREP_STATUS=""
-  grep -F "${PATTERN}" "${SHA_SUM_FILE}" && GREP_STATUS="found" || GREP_STATUS="not-found"
-
-  if [ "$GREP_STATUS" == "found" ]; then
-    echo "  -> found in sum file - will update HASH"
-
-    LINENUMBER="$( grep -F -n "$PATTERN" "$SHA_SUM_FILE" | cut -d':' -f1 )"
-    sed -i "${LINENUMBER}d" "$SHA_SUM_FILE"
-
-    # sha256sum "${PATTERN}" >> "${SHA_SUM_FILE}"
-    HASH_INFO="$(sha256sum "${PATTERN}")"
-    echo "${HASH_INFO}"
-    echo "${HASH_INFO}" >> "${SHA_SUM_FILE}"
-
-    NEW_HASHES="yes"
-  elif [ "$GREP_STATUS" == "not-found" ]; then
-    echo "  -> new file - will append HASH"
-
-    # sha256sum "${PATTERN}" >> "${SHA_SUM_FILE}"
-    HASH_INFO="$(sha256sum "${PATTERN}")"
-    echo "${HASH_INFO}"
-    echo "${HASH_INFO}" >> "${SHA_SUM_FILE}"
-
-    NEW_HASHES="yes"
-	else
-		echo "something went wrong while searching"
-    exit 1
-  fi
-
-  COUNTER=$((COUNTER + 1))
-
-done < "${SHA_SUM_FILE_UPDATES}"
-
-echo ""
-rm -rf "${SHA_SUM_FILE_UPDATES}"
-echo "Removed temporary file '${SHA_SUM_FILE_UPDATES}'."
-
-if [ "$NEW_HASHES" == "yes" ]; then
-  sort --unique "${SHA_SUM_FILE}" -o "${SHA_SUM_FILE}"
-  echo "Sorted '${SHA_SUM_FILE}' file (using 'unique' mode)."
-
-  sha256sum "${SHA_SUM_FILE}" > "${SHA_SUM_FILE}.sha"
-  echo "Generated '${SHA_SUM_FILE}.sha' file."
-else
-  echo "No files to hash."
-fi
+"${HOME_DIRECTORY}/bin/firefox/firefox" -profile "${MOZL_PROFILE_FOLDER}"
+rm -rf "${MOZL_PROFILE_FOLDER}"
 
 exit 0
 

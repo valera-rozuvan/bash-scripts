@@ -4,33 +4,18 @@
 #                                                                              #
 # This script is part of a collection of useful Bash scripts.                  #
 #                                                                              #
-# Script: update-sha256-hashes.sh                                              #
-# Description: Re-compute sha256sum hash file based on newer files (compared   #
-#              to the date of last modification of the sha256sum.txt file.     #
+# Script: get-ffox.sh                                                          #
+# Description: Downloads Firefox release for `linux-x86_64` architecture,      #
+#              checks the sha256sum of the downloaded file, and extracts to    #
+#              `~/bin` folder.                                                 #
 #                                                                              #
 # Author: Valera Rozuvan                                                       #
 # GitHub: https://github.com/valera-rozuvan/bash-scripts                       #
 # SPDX-License-Identifier: MIT                                                 #
-# Last update: 2025-10-14T21:26:35+03:00                                       #
+# Last update: 2025-10-14T22:07:38+03:00                                       #
 # Bash: GNU bash, version 5.2.37(1)-release (x86_64-pc-linux-gnu)              #
 #                                                                              #
 ################################################################################
-
-#################################################################################
-#                                                                               #
-# check for common errors                                                       #
-#   __shellcheck -s bash ./update-sha256-hashes.sh                              #
-#  (remove __ above)                                                            #
-#                                                                               #
-# https://github.com/koalaman/shellcheck                                        #
-#                                                                               #
-# see helpful resources:                                                        #
-#   https://bash-prompt.net/guides/bash-help-case-statement/                    #
-#   https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/        #
-#   https://mywiki.wooledge.org/BashGuide                                       #
-#   https://mywiki.wooledge.org/BashFAQ                                         #
-#                                                                               #
-#################################################################################
 
 
 
@@ -136,110 +121,46 @@ trap hndl_ERR     ERR
 
 # ----- Main logic -------------------------------------------------------------
 
-WORKDIR1="$(pwd)"
-WORKDIR2="$PWD"
-if [ "$WORKDIR1" == "$WORKDIR2" ]; then
-  echo "Working directory is '${WORKDIR1}'. Good :-)"
-else
-  echo "Something strange with working directory."
-  exit 1
-fi
+mkdir -p "${HOME}/Downloads"
+cd "${HOME}/Downloads"
 
-if [ "$#" -ne 1 ]; then
-  echo "You need to pass 1 argument. It should be the name of a directory."
-  exit 1
-fi
+rm -rf ./SHA256SUMS
+rm -rf ./firefox-143.0.4.tar.xz.sha256sum.txt
+rm -rf ./firefox-143.0.4.tar.xz
+rm -rf ./linux-x86_64/en-US/
+rm -rf ./firefox
 
-args=("$@")
+BASE_URL="https://ftp.mozilla.org/pub/firefox/releases/143.0.4"
 
-FOLDER_TO_HASH="${args[0]}"
-if [[ -d $FOLDER_TO_HASH ]]; then
-  echo "Argument provided '$FOLDER_TO_HASH'. It is a directory. Good :-)"
-elif [[ -f $FOLDER_TO_HASH ]]; then
-  echo "Argument provided '$FOLDER_TO_HASH'. It is a file, but should be a directory."
-  exit 1
-else
-  echo "Argument provided '$FOLDER_TO_HASH'. No file or directory with such a name."
-  exit 1
-fi
+curl \
+  --proto '=https' \
+  --tlsv1.2 \
+  -sSf \
+  "${BASE_URL}/SHA256SUMS" \
+  -o SHA256SUMS
 
-SHA_SUM_FILE="${FOLDER_TO_HASH}.sha256sum.txt"
-if [[ -d $SHA_SUM_FILE ]]; then
-  echo "Make sure that '${SHA_SUM_FILE}' is a file."
-  exit 1
-elif [[ -f $SHA_SUM_FILE ]]; then
-  echo "File '${SHA_SUM_FILE}' exists. Good :-)"
-else
-  echo "Make sure that file '${SHA_SUM_FILE}' exists."
-  exit 1
-fi
+curl \
+  --proto '=https' \
+  --tlsv1.2 \
+  -sSf \
+  "${BASE_URL}/linux-x86_64/en-US/firefox-143.0.4.tar.xz" \
+  -o firefox-143.0.4.tar.xz
 
-SHA_SUM_FILE_UPDATES="${SHA_SUM_FILE}-updates"
-touch "${SHA_SUM_FILE_UPDATES}"
-if [[ -f $SHA_SUM_FILE_UPDATES ]]; then
-  echo "Created temporary file '${SHA_SUM_FILE_UPDATES}'. Good :-)"
-else
-  echo "Could not create a temporary file '${SHA_SUM_FILE_UPDATES}'."
-  exit 1
-fi
+mkdir -p ./linux-x86_64/en-US/
+mv firefox-143.0.4.tar.xz ./linux-x86_64/en-US/
 
-find "${FOLDER_TO_HASH}" -type f -newer "${SHA_SUM_FILE}" | sort | uniq > "${SHA_SUM_FILE_UPDATES}"
-NEW_HASHES="no"
-COUNTER=1
-TOTAL="$(wc -l < "${SHA_SUM_FILE_UPDATES}")"
+grep -i "143.0.4" SHA256SUMS \
+  | grep -i "linux-x86_64" \
+  | grep -i "en-US" \
+  | grep -i "firefox-143.0.4.tar.xz" > ./firefox-143.0.4.tar.xz.sha256sum.txt
 
-while IFS= read -r line; do
+sha256sum --check --quiet --warn ./firefox-143.0.4.tar.xz.sha256sum.txt
 
-  PATTERN="${line}"
-  echo ""
-  echo "[${COUNTER} of ${TOTAL}] Looking for '${PATTERN}' in file '${SHA_SUM_FILE}'"
+tar xf ./linux-x86_64/en-US/firefox-143.0.4.tar.xz
 
-  GREP_STATUS=""
-  grep -F "${PATTERN}" "${SHA_SUM_FILE}" && GREP_STATUS="found" || GREP_STATUS="not-found"
-
-  if [ "$GREP_STATUS" == "found" ]; then
-    echo "  -> found in sum file - will update HASH"
-
-    LINENUMBER="$( grep -F -n "$PATTERN" "$SHA_SUM_FILE" | cut -d':' -f1 )"
-    sed -i "${LINENUMBER}d" "$SHA_SUM_FILE"
-
-    # sha256sum "${PATTERN}" >> "${SHA_SUM_FILE}"
-    HASH_INFO="$(sha256sum "${PATTERN}")"
-    echo "${HASH_INFO}"
-    echo "${HASH_INFO}" >> "${SHA_SUM_FILE}"
-
-    NEW_HASHES="yes"
-  elif [ "$GREP_STATUS" == "not-found" ]; then
-    echo "  -> new file - will append HASH"
-
-    # sha256sum "${PATTERN}" >> "${SHA_SUM_FILE}"
-    HASH_INFO="$(sha256sum "${PATTERN}")"
-    echo "${HASH_INFO}"
-    echo "${HASH_INFO}" >> "${SHA_SUM_FILE}"
-
-    NEW_HASHES="yes"
-	else
-		echo "something went wrong while searching"
-    exit 1
-  fi
-
-  COUNTER=$((COUNTER + 1))
-
-done < "${SHA_SUM_FILE_UPDATES}"
-
-echo ""
-rm -rf "${SHA_SUM_FILE_UPDATES}"
-echo "Removed temporary file '${SHA_SUM_FILE_UPDATES}'."
-
-if [ "$NEW_HASHES" == "yes" ]; then
-  sort --unique "${SHA_SUM_FILE}" -o "${SHA_SUM_FILE}"
-  echo "Sorted '${SHA_SUM_FILE}' file (using 'unique' mode)."
-
-  sha256sum "${SHA_SUM_FILE}" > "${SHA_SUM_FILE}.sha"
-  echo "Generated '${SHA_SUM_FILE}.sha' file."
-else
-  echo "No files to hash."
-fi
+mkdir -p ~/bin
+rm -rf ~/bin/firefox
+cp --recursive ./firefox ~/bin/
 
 exit 0
 

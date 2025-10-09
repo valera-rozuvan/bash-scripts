@@ -4,33 +4,17 @@
 #                                                                              #
 # This script is part of a collection of useful Bash scripts.                  #
 #                                                                              #
-# Script: update-sha256-hashes.sh                                              #
-# Description: Re-compute sha256sum hash file based on newer files (compared   #
-#              to the date of last modification of the sha256sum.txt file.     #
+# Script: rnd-str.sh                                                           #
+# Description: Generate a random string of length N. Specify N as the first    #
+#              argument. Without an argument - length 8 is the default.        #
 #                                                                              #
 # Author: Valera Rozuvan                                                       #
 # GitHub: https://github.com/valera-rozuvan/bash-scripts                       #
 # SPDX-License-Identifier: MIT                                                 #
-# Last update: 2025-10-14T21:26:35+03:00                                       #
+# Last update: 2025-10-14T21:11:59+03:00                                       #
 # Bash: GNU bash, version 5.2.37(1)-release (x86_64-pc-linux-gnu)              #
 #                                                                              #
 ################################################################################
-
-#################################################################################
-#                                                                               #
-# check for common errors                                                       #
-#   __shellcheck -s bash ./update-sha256-hashes.sh                              #
-#  (remove __ above)                                                            #
-#                                                                               #
-# https://github.com/koalaman/shellcheck                                        #
-#                                                                               #
-# see helpful resources:                                                        #
-#   https://bash-prompt.net/guides/bash-help-case-statement/                    #
-#   https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/        #
-#   https://mywiki.wooledge.org/BashGuide                                       #
-#   https://mywiki.wooledge.org/BashFAQ                                         #
-#                                                                               #
-#################################################################################
 
 
 
@@ -136,109 +120,56 @@ trap hndl_ERR     ERR
 
 # ----- Main logic -------------------------------------------------------------
 
-WORKDIR1="$(pwd)"
-WORKDIR2="$PWD"
-if [ "$WORKDIR1" == "$WORKDIR2" ]; then
-  echo "Working directory is '${WORKDIR1}'. Good :-)"
+SCRIPT_WILL_RUN=0
+
+if [[ "$OSTYPE" == "linux-gnu"* ]] ; then
+  SCRIPT_WILL_RUN=1
+elif [[ "$OSTYPE" == "darwin"* ]] ; then
+  SCRIPT_WILL_RUN=1
+elif [[ "$OSTYPE" == "cygwin" ]] ; then
+  SCRIPT_WILL_RUN=0
+elif [[ "$OSTYPE" == "msys" ]] ; then
+  SCRIPT_WILL_RUN=0
+elif [[ "$OSTYPE" == "win32" ]] ; then
+  SCRIPT_WILL_RUN=0
+elif [[ "$OSTYPE" == "freebsd"* ]] ; then
+  SCRIPT_WILL_RUN=0
 else
-  echo "Something strange with working directory."
+  SCRIPT_WILL_RUN=0
+fi
+
+if [[ "$SCRIPT_WILL_RUN" == "0" ]] ; then
+  echo "ERROR. OS type '${OSTYPE}' not supported! Script will exit."
   exit 1
 fi
 
-if [ "$#" -ne 1 ]; then
-  echo "You need to pass 1 argument. It should be the name of a directory."
+LENGTH=${1:-8}
+SILENT=${2:-q}
+
+if ! [[ "$LENGTH" =~ ^[0-9]+$ ]] ; then
+  echo "ERROR. Please provide a positive integer as 1st argument to this script."
   exit 1
 fi
 
-args=("$@")
-
-FOLDER_TO_HASH="${args[0]}"
-if [[ -d $FOLDER_TO_HASH ]]; then
-  echo "Argument provided '$FOLDER_TO_HASH'. It is a directory. Good :-)"
-elif [[ -f $FOLDER_TO_HASH ]]; then
-  echo "Argument provided '$FOLDER_TO_HASH'. It is a file, but should be a directory."
-  exit 1
-else
-  echo "Argument provided '$FOLDER_TO_HASH'. No file or directory with such a name."
+if [[ $LENGTH -eq 0 ]] ; then
+  echo "ERROR. Length can't equal 0."
   exit 1
 fi
 
-SHA_SUM_FILE="${FOLDER_TO_HASH}.sha256sum.txt"
-if [[ -d $SHA_SUM_FILE ]]; then
-  echo "Make sure that '${SHA_SUM_FILE}' is a file."
-  exit 1
-elif [[ -f $SHA_SUM_FILE ]]; then
-  echo "File '${SHA_SUM_FILE}' exists. Good :-)"
-else
-  echo "Make sure that file '${SHA_SUM_FILE}' exists."
-  exit 1
+if [[ "$OSTYPE" == "linux-gnu"* ]] ; then
+  RND=$(tr -dc 'A-Za-z0-9' < /dev/urandom | head -c "${LENGTH}" 2> /dev/null || true)
+elif [[ "$OSTYPE" == "darwin"* ]] ; then
+  RND=$(env LC_ALL=C tr -dc 'a-zA-Z0-9' < /dev/urandom | fold -w "${LENGTH}" | head -n 1)
 fi
 
-SHA_SUM_FILE_UPDATES="${SHA_SUM_FILE}-updates"
-touch "${SHA_SUM_FILE_UPDATES}"
-if [[ -f $SHA_SUM_FILE_UPDATES ]]; then
-  echo "Created temporary file '${SHA_SUM_FILE_UPDATES}'. Good :-)"
+if [[ "$SILENT" = "v" ]] ; then
+  echo -e "Verbose mode.\n"
+
+  echo "OSTYPE = ${OSTYPE}"
+  echo "LENGTH = ${LENGTH}"
+  echo "RND = ${RND}"
 else
-  echo "Could not create a temporary file '${SHA_SUM_FILE_UPDATES}'."
-  exit 1
-fi
-
-find "${FOLDER_TO_HASH}" -type f -newer "${SHA_SUM_FILE}" | sort | uniq > "${SHA_SUM_FILE_UPDATES}"
-NEW_HASHES="no"
-COUNTER=1
-TOTAL="$(wc -l < "${SHA_SUM_FILE_UPDATES}")"
-
-while IFS= read -r line; do
-
-  PATTERN="${line}"
-  echo ""
-  echo "[${COUNTER} of ${TOTAL}] Looking for '${PATTERN}' in file '${SHA_SUM_FILE}'"
-
-  GREP_STATUS=""
-  grep -F "${PATTERN}" "${SHA_SUM_FILE}" && GREP_STATUS="found" || GREP_STATUS="not-found"
-
-  if [ "$GREP_STATUS" == "found" ]; then
-    echo "  -> found in sum file - will update HASH"
-
-    LINENUMBER="$( grep -F -n "$PATTERN" "$SHA_SUM_FILE" | cut -d':' -f1 )"
-    sed -i "${LINENUMBER}d" "$SHA_SUM_FILE"
-
-    # sha256sum "${PATTERN}" >> "${SHA_SUM_FILE}"
-    HASH_INFO="$(sha256sum "${PATTERN}")"
-    echo "${HASH_INFO}"
-    echo "${HASH_INFO}" >> "${SHA_SUM_FILE}"
-
-    NEW_HASHES="yes"
-  elif [ "$GREP_STATUS" == "not-found" ]; then
-    echo "  -> new file - will append HASH"
-
-    # sha256sum "${PATTERN}" >> "${SHA_SUM_FILE}"
-    HASH_INFO="$(sha256sum "${PATTERN}")"
-    echo "${HASH_INFO}"
-    echo "${HASH_INFO}" >> "${SHA_SUM_FILE}"
-
-    NEW_HASHES="yes"
-	else
-		echo "something went wrong while searching"
-    exit 1
-  fi
-
-  COUNTER=$((COUNTER + 1))
-
-done < "${SHA_SUM_FILE_UPDATES}"
-
-echo ""
-rm -rf "${SHA_SUM_FILE_UPDATES}"
-echo "Removed temporary file '${SHA_SUM_FILE_UPDATES}'."
-
-if [ "$NEW_HASHES" == "yes" ]; then
-  sort --unique "${SHA_SUM_FILE}" -o "${SHA_SUM_FILE}"
-  echo "Sorted '${SHA_SUM_FILE}' file (using 'unique' mode)."
-
-  sha256sum "${SHA_SUM_FILE}" > "${SHA_SUM_FILE}.sha"
-  echo "Generated '${SHA_SUM_FILE}.sha' file."
-else
-  echo "No files to hash."
+  echo "${RND}"
 fi
 
 exit 0
