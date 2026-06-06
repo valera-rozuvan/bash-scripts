@@ -188,6 +188,9 @@ echo "" > "${MOZL_PROFILE_FOLDER}/user.js"
   echo "user_pref(\"browser.warnOnQuitShortcut\", false);"
   echo "user_pref(\"sidebar.revamp\", false);"
   echo "user_pref(\"startup.homepage_welcome_url\", \"\");"
+  echo "user_pref(\"browser.toolbars.bookmarks.visibility\", \"never\");"
+  echo "user_pref(\"datareporting.policy.dataSubmissionPolicyBypassNotification\", true);"
+  echo "user_pref(\"browser.sessionstore.resume_from_crash\", false);"
 } >> "${MOZL_PROFILE_FOLDER}/user.js"
 
 # also check suggestions https://msfn.org/board/topic/186106-r3dfox-a-modern-firefox-based-web-browser-for-windows-vista-7-and-8/page/9/
